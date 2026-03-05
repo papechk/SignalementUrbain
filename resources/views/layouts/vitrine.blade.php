@@ -113,6 +113,10 @@
                    class="rounded-lg px-3 py-2 text-sm font-medium {{ request()->routeIs('vitrine.signalements') ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
                     Signalements
                 </a>
+                <a href="{{ route('vitrine.carte') }}"
+                   class="rounded-lg px-3 py-2 text-sm font-medium {{ request()->routeIs('vitrine.carte') ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
+                    <i class="bi bi-map me-1"></i>Carte
+                </a>
                 <a href="{{ route('vitrine.suivi') }}"
                    class="rounded-lg px-3 py-2 text-sm font-medium {{ request()->routeIs('vitrine.suivi') ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
                     Suivi
@@ -144,6 +148,9 @@
             <div class="space-y-1 px-4 py-3">
                 <a href="{{ route('accueil') }}" class="block rounded-lg px-3 py-2 text-sm {{ request()->routeIs('accueil') ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-white/10' }}">Accueil</a>
                 <a href="{{ route('vitrine.signalements') }}" class="block rounded-lg px-3 py-2 text-sm {{ request()->routeIs('vitrine.signalements') ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-white/10' }}">Signalements</a>
+                <a href="{{ route('vitrine.carte') }}" class="block rounded-lg px-3 py-2 text-sm {{ request()->routeIs('vitrine.carte') ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-white/10' }}">
+                    <i class="bi bi-map me-1"></i>Carte
+                </a>
                 <a href="{{ route('vitrine.suivi') }}" class="block rounded-lg px-3 py-2 text-sm {{ request()->routeIs('vitrine.suivi') ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-white/10' }}">Suivi</a>
                 <a href="{{ route('vitrine.contact') }}" class="block rounded-lg px-3 py-2 text-sm {{ request()->routeIs('vitrine.contact') ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-white/10' }}">Contact</a>
                 <a href="{{ route('vitrine.signaler') }}" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-600">
@@ -194,6 +201,7 @@
                 <ul class="mt-3 space-y-2 text-sm text-slate-700">
                     <li><a class="hover:text-brand-600" href="{{ route('accueil') }}">Accueil</a></li>
                     <li><a class="hover:text-brand-600" href="{{ route('vitrine.signalements') }}">Signalements</a></li>
+                    <li><a class="hover:text-brand-600" href="{{ route('vitrine.carte') }}">Carte</a></li>
                     <li><a class="hover:text-brand-600" href="{{ route('vitrine.suivi') }}">Suivi</a></li>
                     <li><a class="hover:text-brand-600" href="{{ route('vitrine.contact') }}">Contact</a></li>
                 </ul>

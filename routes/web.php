@@ -29,6 +29,8 @@ Route::get('/suivi', [VitriController::class, 'suivi'])->name('vitrine.suivi');
 Route::get('/contact', [VitriController::class, 'contact'])->name('vitrine.contact');
 Route::post('/contact', [VitriController::class, 'contactStore'])->name('vitrine.contact.store');
 
+Route::get('/carte', [VitriController::class, 'carte'])->name('vitrine.carte');
+
 /*
 |--------------------------------------------------------------------------
 | Demo Tailwind animations

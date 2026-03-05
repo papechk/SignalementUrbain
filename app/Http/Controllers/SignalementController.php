@@ -70,6 +70,8 @@ class SignalementController extends Controller
             'quartier'             => 'nullable|string|max:255',
             'priorite'             => 'required|in:faible,moyenne,haute,urgente',
             'photo'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'latitude'             => 'nullable|numeric|between:-90,90',
+            'longitude'            => 'nullable|numeric|between:-180,180',
             'signale_par'          => 'required|string|max:255',
             'email_signaleur'      => 'nullable|email|max:255',
             'telephone_signaleur'  => 'nullable|string|max:20',

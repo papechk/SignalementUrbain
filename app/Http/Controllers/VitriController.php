@@ -109,6 +109,8 @@ class VitriController extends Controller
             'quartier'             => 'nullable|string|max:255',
             'priorite'             => 'required|in:faible,moyenne,haute,urgente',
             'photo'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'latitude'             => 'nullable|numeric|between:-90,90',
+            'longitude'            => 'nullable|numeric|between:-180,180',
             'signale_par'          => 'required|string|max:255',
             'email_signaleur'      => 'nullable|email|max:255',
             'telephone_signaleur'  => 'nullable|string|max:20',
@@ -154,6 +156,28 @@ class VitriController extends Controller
         }
 
         return view('vitrine.suivi', compact('signalement', 'recherche'));
+    }
+
+    /**
+     * Carte interactive des signalements (style Waze)
+     */
+    public function carte()
+    {
+        $signalements = Signalement::with('categorie')
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->get();
+
+        $categories = Categorie::actives()->get();
+
+        $stats = [
+            'nouveau'  => Signalement::where('statut', 'nouveau')->count(),
+            'en_cours' => Signalement::where('statut', 'en_cours')->count(),
+            'resolu'   => Signalement::where('statut', 'resolu')->count(),
+            'rejete'   => Signalement::where('statut', 'rejete')->count(),
+        ];
+
+        return view('vitrine.carte', compact('signalements', 'categories', 'stats'));
     }
 
     /**

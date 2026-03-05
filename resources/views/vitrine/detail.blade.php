@@ -2,6 +2,14 @@
 
 @section('title', $signalement->titre)
 
+@push('styles')
+@if($signalement->latitude && $signalement->longitude)
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>#detailMap { height: 200px; border-radius: 10px; margin-top: .75rem; }</style>
+@endif
+@endpush
+
 @section('content')
 <section style="padding: 3rem 0;">
     <div class="container">
@@ -92,6 +100,9 @@
                         @if($signalement->quartier)
                             <p class="text-muted small mb-0">Quartier : {{ $signalement->quartier }}</p>
                         @endif
+                        @if($signalement->latitude && $signalement->longitude)
+                            <div id="detailMap"></div>
+                        @endif
                     </div>
                 </div>
 
@@ -159,3 +170,20 @@
     </div>
 </section>
 @endsection
+
+@if($signalement->latitude && $signalement->longitude)
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const map = L.map('detailMap').setView([{{ $signalement->latitude }}, {{ $signalement->longitude }}], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap', maxZoom: 19
+    }).addTo(map);
+    L.marker([{{ $signalement->latitude }}, {{ $signalement->longitude }}]).addTo(map)
+     .bindPopup('<strong>{{ addslashes($signalement->titre) }}</strong>').openPopup();
+});
+</script>
+@endpush
+@endif

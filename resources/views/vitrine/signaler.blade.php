@@ -2,6 +2,14 @@
 
 @section('title', 'Signaler un problème')
 
+@push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+    #mapPicker .leaflet-container { border-radius: 12px; }
+</style>
+@endpush
+
 @section('content')
 <section style="padding: 3rem 0;">
     <div class="container">
@@ -110,6 +118,24 @@
                                            placeholder="Ex: Centre-ville">
                                     @error('quartier') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">
+                                        <i class="bi bi-pin-map text-primary me-1"></i> Position sur la carte
+                                        <small class="text-muted fw-normal">(cliquez pour placer le marqueur)</small>
+                                    </label>
+                                    <div id="mapPicker" style="height:300px;border-radius:12px;border:2px solid #dee2e6;"></div>
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <input type="text" class="form-control form-control-sm bg-light" id="latitude" name="latitude" value="{{ old('latitude') }}" placeholder="Latitude" readonly>
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control form-control-sm bg-light" id="longitude" name="longitude" value="{{ old('longitude') }}" placeholder="Longitude" readonly>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="btnGeolocate" class="btn btn-sm btn-outline-primary mt-2">
+                                        <i class="bi bi-crosshair me-1"></i> Utiliser ma position actuelle
+                                    </button>
+                                </div>
                             </div>
 
                             <!-- Étape 3 : Vos coordonnées -->
@@ -176,3 +202,65 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const defaultLat = {{ old('latitude', 14.6937) }};
+    const defaultLng = {{ old('longitude', -17.4441) }};
+    const hasOldCoords = {{ old('latitude') ? 'true' : 'false' }};
+
+    const map = L.map('mapPicker').setView([defaultLat, defaultLng], hasOldCoords ? 16 : 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap',
+        maxZoom: 19
+    }).addTo(map);
+
+    let marker = null;
+
+    function placeMarker(lat, lng) {
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+            marker.on('dragend', function (e) {
+                const pos = e.target.getLatLng();
+                updateCoords(pos.lat, pos.lng);
+            });
+        }
+        updateCoords(lat, lng);
+    }
+
+    function updateCoords(lat, lng) {
+        document.getElementById('latitude').value = lat.toFixed(8);
+        document.getElementById('longitude').value = lng.toFixed(8);
+    }
+
+    if (hasOldCoords) {
+        placeMarker(defaultLat, defaultLng);
+    }
+
+    map.on('click', function (e) {
+        placeMarker(e.latlng.lat, e.latlng.lng);
+    });
+
+    document.getElementById('btnGeolocate').addEventListener('click', function () {
+        if (!navigator.geolocation) {
+            alert('La géolocalisation n\'est pas supportée par votre navigateur.');
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            map.setView([lat, lng], 16);
+            placeMarker(lat, lng);
+        }, function () {
+            alert('Impossible de récupérer votre position.');
+        });
+    });
+});
+</script>
+@endpush
