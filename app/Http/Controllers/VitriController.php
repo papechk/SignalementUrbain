@@ -111,10 +111,12 @@ class VitriController extends Controller
             'photo'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'latitude'             => 'nullable|numeric|between:-90,90',
             'longitude'            => 'nullable|numeric|between:-180,180',
-            'signale_par'          => 'required|string|max:255',
-            'email_signaleur'      => 'nullable|email|max:255',
             'telephone_signaleur'  => 'nullable|string|max:20',
         ]);
+
+        // Auto-fill from authenticated user
+        $validated['signale_par']     = auth()->user()->name;
+        $validated['email_signaleur'] = auth()->user()->email;
 
         // Upload photo
         if ($request->hasFile('photo')) {

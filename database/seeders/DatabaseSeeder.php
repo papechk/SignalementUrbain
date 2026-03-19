@@ -28,6 +28,27 @@ class DatabaseSeeder extends Seeder
             'role'     => 'agent',
         ]);
 
+        // Faux citoyens pour tester
+        $citoyens = [
+            ['name' => 'Moussa Diop',      'email' => 'moussa.diop@email.com'],
+            ['name' => 'Fatou Ndiaye',      'email' => 'fatou.ndiaye@email.com'],
+            ['name' => 'Abdoulaye Fall',    'email' => 'abdoulaye.fall@email.com'],
+            ['name' => 'Aissatou Ba',       'email' => 'aissatou.ba@email.com'],
+            ['name' => 'Ibrahima Sow',      'email' => 'ibrahima.sow@email.com'],
+            ['name' => 'Aminata Sarr',      'email' => 'aminata.sarr@email.com'],
+            ['name' => 'Ousmane Diallo',    'email' => 'ousmane.diallo@email.com'],
+            ['name' => 'Mariama Gueye',     'email' => 'mariama.gueye@email.com'],
+        ];
+
+        foreach ($citoyens as $c) {
+            User::create([
+                'name'     => $c['name'],
+                'email'    => $c['email'],
+                'password' => Hash::make('password'),
+                'role'     => 'citoyen',
+            ]);
+        }
+
         // ========== CATÉGORIES ==========
         $categories = [
             ['nom' => 'Voirie',              'icone' => 'cone-striped',       'description' => 'Nids-de-poule, chaussée dégradée, trottoirs abîmés'],
@@ -58,9 +79,9 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4467,
                 'statut'               => 'en_cours',
                 'priorite'             => 'haute',
-                'signale_par'          => 'Jean Dupont',
-                'email_signaleur'      => 'jean.dupont@email.com',
-                'telephone_signaleur'  => '06 12 34 56 78',
+                'signale_par'          => 'Moussa Diop',
+                'email_signaleur'      => 'moussa.diop@email.com',
+                'telephone_signaleur'  => '77 123 45 67',
                 'commentaire_mairie'   => 'Intervention programmée pour la semaine prochaine.',
             ],
             [
@@ -73,9 +94,9 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4553,
                 'statut'               => 'nouveau',
                 'priorite'             => 'moyenne',
-                'signale_par'          => 'Marie Martin',
-                'email_signaleur'      => 'marie.martin@email.com',
-                'telephone_signaleur'  => '06 98 76 54 32',
+                'signale_par'          => 'Fatou Ndiaye',
+                'email_signaleur'      => 'fatou.ndiaye@email.com',
+                'telephone_signaleur'  => '76 345 67 89',
             ],
             [
                 'titre'               => 'Dépôt sauvage d\'encombrants',
@@ -87,8 +108,8 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4410,
                 'statut'               => 'nouveau',
                 'priorite'             => 'urgente',
-                'signale_par'          => 'Pierre Durand',
-                'email_signaleur'      => 'p.durand@email.com',
+                'signale_par'          => 'Abdoulaye Fall',
+                'email_signaleur'      => 'abdoulaye.fall@email.com',
             ],
             [
                 'titre'               => 'Arbre déraciné au parc municipal',
@@ -100,8 +121,8 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4500,
                 'statut'               => 'en_cours',
                 'priorite'             => 'urgente',
-                'signale_par'          => 'Sophie Leroy',
-                'telephone_signaleur'  => '07 11 22 33 44',
+                'signale_par'          => 'Aissatou Ba',
+                'telephone_signaleur'  => '78 678 90 12',
                 'commentaire_mairie'   => 'Équipe d\'intervention en route. Zone sécurisée.',
             ],
             [
@@ -114,8 +135,8 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4380,
                 'statut'               => 'resolu',
                 'priorite'             => 'haute',
-                'signale_par'          => 'Ahmed Benali',
-                'email_signaleur'      => 'a.benali@email.com',
+                'signale_par'          => 'Ibrahima Sow',
+                'email_signaleur'      => 'ibrahima.sow@email.com',
                 'commentaire_mairie'   => 'Feu réparé le 28/02/2026 par notre équipe technique.',
                 'date_resolution'      => '2026-02-28 14:30:00',
             ],
@@ -129,8 +150,8 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4425,
                 'statut'               => 'en_cours',
                 'priorite'             => 'haute',
-                'signale_par'          => 'Fatima Diallo',
-                'telephone_signaleur'  => '06 55 44 33 22',
+                'signale_par'          => 'Aminata Sarr',
+                'telephone_signaleur'  => '70 890 12 34',
                 'commentaire_mairie'   => 'Service des eaux alerté.',
             ],
             [
@@ -143,8 +164,8 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4480,
                 'statut'               => 'nouveau',
                 'priorite'             => 'haute',
-                'signale_par'          => 'Claire Moreau',
-                'email_signaleur'      => 'claire.moreau@email.com',
+                'signale_par'          => 'Ousmane Diallo',
+                'email_signaleur'      => 'ousmane.diallo@email.com',
             ],
             [
                 'titre'               => 'Poubelles non ramassées depuis 3 jours',
@@ -156,7 +177,8 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4520,
                 'statut'               => 'resolu',
                 'priorite'             => 'moyenne',
-                'signale_par'          => 'Luc Bernard',
+                'signale_par'          => 'Mariama Gueye',
+                'email_signaleur'      => 'mariama.gueye@email.com',
                 'commentaire_mairie'   => 'Service de collecte intervenu. Problème de camion en panne résolu.',
                 'date_resolution'      => '2026-03-01 09:00:00',
             ],
@@ -170,8 +192,8 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4450,
                 'statut'               => 'nouveau',
                 'priorite'             => 'faible',
-                'signale_par'          => 'Robert Petit',
-                'telephone_signaleur'  => '06 77 88 99 00',
+                'signale_par'          => 'Moussa Diop',
+                'telephone_signaleur'  => '77 123 45 67',
             ],
             [
                 'titre'               => 'Graffitis sur le mur de la médiathèque',
@@ -183,8 +205,8 @@ class DatabaseSeeder extends Seeder
                 'longitude'            => -17.4350,
                 'statut'               => 'rejete',
                 'priorite'             => 'faible',
-                'signale_par'          => 'Nathalie Girard',
-                'email_signaleur'      => 'n.girard@email.com',
+                'signale_par'          => 'Fatou Ndiaye',
+                'email_signaleur'      => 'fatou.ndiaye@email.com',
                 'commentaire_mairie'   => 'Pris en charge directement par le service des bâtiments publics.',
             ],
         ];

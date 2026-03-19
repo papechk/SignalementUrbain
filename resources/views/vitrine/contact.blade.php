@@ -3,111 +3,112 @@
 @section('title', 'Contact')
 
 @section('content')
-<section style="padding: 3rem 0;">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Contactez la Mairie</h2>
-            <p class="section-subtitle mb-0">Vous avez une question ? N'hésitez pas à nous contacter</p>
+<section class="py-14">
+    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-10 text-center">
+            <h2 class="font-display text-3xl font-extrabold text-slate-900">Contactez la Mairie</h2>
+            <p class="mt-2 text-slate-600">Vous avez une question ? N'hésitez pas à nous contacter.</p>
         </div>
 
-        <div class="row g-4 justify-content-center">
-            <!-- Coordonnées -->
-            <div class="col-lg-5">
-                <div class="card border-0 shadow-sm h-100" style="border-radius:16px;">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold mb-4" style="color:var(--secondary);">
-                            <i class="bi bi-building me-2 text-primary"></i>Informations
-                        </h5>
+        <div class="grid gap-6 lg:grid-cols-5">
+            {{-- Coordonnées --}}
+            <div class="lg:col-span-2">
+                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm h-full">
+                    <h3 class="font-display text-lg font-bold text-slate-900 mb-6">
+                        <i class="bi bi-building mr-2 text-brand-500"></i>Informations
+                    </h3>
 
-                        <div class="d-flex mb-4">
-                            <div class="rounded-3 bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3"
-                                 style="width:45px;height:45px;min-width:45px;">
-                                <i class="bi bi-geo-alt text-primary"></i>
-                            </div>
+                    <div class="space-y-5">
+                        <div class="flex gap-4">
+                            <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+                                <i class="bi bi-geo-alt"></i>
+                            </span>
                             <div>
-                                <div class="fw-bold small">Adresse</div>
-                                <div class="text-muted small">Place de la Mairie<br>75001 Paris</div>
+                                <p class="text-sm font-semibold text-slate-900">Adresse</p>
+                                <p class="text-sm text-slate-500">Place de l'Indépendance<br>Dakar, Sénégal</p>
                             </div>
                         </div>
 
-                        <div class="d-flex mb-4">
-                            <div class="rounded-3 bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3"
-                                 style="width:45px;height:45px;min-width:45px;">
-                                <i class="bi bi-telephone text-primary"></i>
-                            </div>
+                        <div class="flex gap-4">
+                            <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+                                <i class="bi bi-telephone"></i>
+                            </span>
                             <div>
-                                <div class="fw-bold small">Téléphone</div>
-                                <div class="text-muted small">01 23 45 67 89</div>
+                                <p class="text-sm font-semibold text-slate-900">Téléphone</p>
+                                <p class="text-sm text-slate-500">+221 33 849 45 67</p>
                             </div>
                         </div>
 
-                        <div class="d-flex mb-4">
-                            <div class="rounded-3 bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3"
-                                 style="width:45px;height:45px;min-width:45px;">
-                                <i class="bi bi-envelope text-primary"></i>
-                            </div>
+                        <div class="flex gap-4">
+                            <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+                                <i class="bi bi-envelope"></i>
+                            </span>
                             <div>
-                                <div class="fw-bold small">Email</div>
-                                <div class="text-muted small">contact@mairie.fr</div>
+                                <p class="text-sm font-semibold text-slate-900">Email</p>
+                                <p class="text-sm text-slate-500">contact@mairie-dakar.sn</p>
                             </div>
                         </div>
 
-                        <div class="d-flex">
-                            <div class="rounded-3 bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3"
-                                 style="width:45px;height:45px;min-width:45px;">
-                                <i class="bi bi-clock text-primary"></i>
-                            </div>
+                        <div class="flex gap-4">
+                            <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+                                <i class="bi bi-clock"></i>
+                            </span>
                             <div>
-                                <div class="fw-bold small">Horaires d'ouverture</div>
-                                <div class="text-muted small">
-                                    Lun - Ven : 8h30 - 17h00<br>
-                                    Sam : 9h00 - 12h00<br>
+                                <p class="text-sm font-semibold text-slate-900">Horaires d'ouverture</p>
+                                <p class="text-sm text-slate-500">
+                                    Lun – Ven : 8h00 – 17h00<br>
+                                    Sam : 9h00 – 12h00<br>
                                     Dim : Fermé
-                                </div>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Formulaire de contact -->
-            <div class="col-lg-7">
-                <div class="card border-0 shadow-sm h-100" style="border-radius:16px;">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold mb-4" style="color:var(--secondary);">
-                            <i class="bi bi-envelope me-2 text-primary"></i>Envoyez-nous un message
-                        </h5>
-                        <form>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small">Nom complet <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" placeholder="Votre nom" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small">Email <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" placeholder="votre@email.com" required>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-bold small">Sujet <span class="text-danger">*</span></label>
-                                    <select class="form-select">
-                                        <option>Question sur un signalement</option>
-                                        <option>Signalement non traité</option>
-                                        <option>Suggestion d'amélioration</option>
-                                        <option>Autre</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-bold small">Message <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" rows="5" placeholder="Votre message..." required></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-primary-custom w-100">
-                                        <i class="bi bi-send me-2"></i>Envoyer le message
-                                    </button>
-                                </div>
+            {{-- Formulaire --}}
+            <div class="lg:col-span-3">
+                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h3 class="font-display text-lg font-bold text-slate-900 mb-6">
+                        <i class="bi bi-envelope mr-2 text-brand-500"></i>Envoyez-nous un message
+                    </h3>
+                    <form action="{{ route('vitrine.contact.store') }}" method="POST" class="space-y-4">
+                        @csrf
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label for="nom" class="mb-1 block text-sm font-semibold text-slate-700">Nom complet <span class="text-rose-500">*</span></label>
+                                <input type="text" id="nom" name="nom" value="{{ old('nom') }}" required
+                                       class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500"
+                                       placeholder="Votre nom">
                             </div>
-                        </form>
-                    </div>
+                            <div>
+                                <label for="email" class="mb-1 block text-sm font-semibold text-slate-700">Email <span class="text-rose-500">*</span></label>
+                                <input type="email" id="email" name="email" value="{{ old('email') }}" required
+                                       class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500"
+                                       placeholder="votre@email.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="sujet" class="mb-1 block text-sm font-semibold text-slate-700">Sujet <span class="text-rose-500">*</span></label>
+                            <select id="sujet" name="sujet" required
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500">
+                                <option value="Question sur un signalement">Question sur un signalement</option>
+                                <option value="Signalement non traité">Signalement non traité</option>
+                                <option value="Suggestion d'amélioration">Suggestion d'amélioration</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="message" class="mb-1 block text-sm font-semibold text-slate-700">Message <span class="text-rose-500">*</span></label>
+                            <textarea id="message" name="message" rows="5" required
+                                      class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500"
+                                      placeholder="Votre message...">{{ old('message') }}</textarea>
+                        </div>
+                        <button type="submit"
+                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600">
+                            <i class="bi bi-send"></i> Envoyer le message
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

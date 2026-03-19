@@ -3,38 +3,32 @@
 @section('title', 'Signalement confirmé')
 
 @section('content')
-<section style="padding: 5rem 0;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 text-center">
-                <div class="card border-0 shadow-sm" style="border-radius:16px;">
-                    <div class="card-body p-5">
-                        <div class="mb-4" style="font-size:4rem;color:#22c55e;">
-                            <i class="bi bi-check-circle"></i>
-                        </div>
-                        <h3 class="fw-bold mb-3" style="color:var(--secondary);">Signalement envoyé !</h3>
-                        <p class="text-muted mb-4">
-                            Votre signalement a bien été enregistré. Les services de la mairie vont l'examiner dans les plus brefs délais.
-                        </p>
+<section class="py-20">
+    <div class="mx-auto w-full max-w-lg px-4 text-center">
+        <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+            <div class="mb-4 text-6xl text-emerald-500">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <h2 class="font-display text-2xl font-extrabold text-slate-900">Signalement envoyé !</h2>
+            <p class="mt-2 text-sm text-slate-500">
+                Votre signalement a bien été enregistré. Les services de la mairie de Dakar vont l'examiner dans les plus brefs délais.
+            </p>
 
-                        <div class="p-3 rounded-3 mb-4" style="background:#f0fdf4;border:1px solid #bbf7d0;">
-                            <div class="small text-muted mb-1">Votre numéro de référence</div>
-                            <div class="fs-4 fw-bold font-monospace" style="color:var(--primary);letter-spacing:0.05em;">
-                                {{ $signalement->reference }}
-                            </div>
-                            <div class="small text-muted mt-1">Conservez ce numéro pour suivre votre signalement</div>
-                        </div>
+            <div class="my-6 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4">
+                <p class="mb-1 text-xs text-slate-500">Votre numéro de référence</p>
+                <p class="font-mono text-2xl font-bold tracking-wider text-brand-600">{{ $signalement->reference }}</p>
+                <p class="mt-1 text-xs text-slate-500">Conservez ce numéro pour suivre votre signalement</p>
+            </div>
 
-                        <div class="d-flex flex-wrap gap-3 justify-content-center">
-                            <a href="{{ route('vitrine.suivi', ['reference' => $signalement->reference]) }}" class="btn btn-primary-custom">
-                                <i class="bi bi-search me-1"></i> Suivre mon signalement
-                            </a>
-                            <a href="{{ route('accueil') }}" class="btn btn-outline-custom">
-                                <i class="bi bi-house me-1"></i> Retour à l'accueil
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex flex-wrap justify-center gap-3">
+                <a href="{{ route('vitrine.suivi', ['reference' => $signalement->reference]) }}"
+                   class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600">
+                    <i class="bi bi-search"></i> Suivre mon signalement
+                </a>
+                <a href="{{ route('accueil') }}"
+                   class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                    <i class="bi bi-house"></i> Retour à l'accueil
+                </a>
             </div>
         </div>
     </div>

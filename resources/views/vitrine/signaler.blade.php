@@ -5,199 +5,161 @@
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-<style>
-    #mapPicker .leaflet-container { border-radius: 12px; }
-</style>
 @endpush
 
 @section('content')
-<section style="padding: 3rem 0;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-9">
-                <div class="text-center mb-4">
-                    <h2 class="section-title">Signaler un problème</h2>
-                    <p class="section-subtitle mb-0">Aidez-nous à améliorer votre cadre de vie</p>
-                </div>
+<section class="py-14">
+    <div class="mx-auto w-full max-w-3xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 text-center">
+            <h2 class="font-display text-3xl font-extrabold text-slate-900">Signaler un problème</h2>
+            <p class="mt-2 text-slate-600">Aidez-nous à améliorer le cadre de vie à Dakar</p>
+        </div>
 
-                <div class="card border-0 shadow-sm" style="border-radius:16px;">
-                    <div class="card-body p-4 p-md-5">
-                        <form action="{{ route('vitrine.signaler.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+            <form action="{{ route('vitrine.signaler.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+                @csrf
 
-                            <!-- Étape 1 : Le problème -->
-                            <div class="mb-4 pb-3 border-bottom">
-                                <h5 class="fw-bold" style="color:var(--primary);">
-                                    <span class="badge bg-primary rounded-circle me-2" style="width:28px;height:28px;font-size:0.85rem;">1</span>
-                                    Le problème
-                                </h5>
-                            </div>
+                {{-- Étape 1 — Le problème --}}
+                <div>
+                    <div class="mb-5 flex items-center gap-3 border-b border-slate-200 pb-3">
+                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white">1</span>
+                        <h3 class="font-display text-lg font-bold text-brand-600">Le problème</h3>
+                    </div>
 
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-8">
-                                    <label for="titre" class="form-label fw-bold">
-                                        Titre du signalement <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="text" class="form-control form-control-lg @error('titre') is-invalid @enderror"
-                                           id="titre" name="titre" value="{{ old('titre') }}"
-                                           placeholder="Ex: Nid-de-poule avenue de la République" required>
-                                    @error('titre') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="categorie_id" class="form-label fw-bold">
-                                        Catégorie <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select form-select-lg @error('categorie_id') is-invalid @enderror"
-                                            id="categorie_id" name="categorie_id" required>
-                                        <option value="">-- Choisir --</option>
-                                        @foreach($categories as $cat)
-                                            <option value="{{ $cat->id }}"
-                                                {{ old('categorie_id', request('categorie')) == $cat->id ? 'selected' : '' }}>
-                                                {{ $cat->nom }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('categorie_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                </div>
-                                <div class="col-12">
-                                    <label for="description" class="form-label fw-bold">
-                                        Description détaillée <span class="text-danger">*</span>
-                                    </label>
-                                    <textarea class="form-control @error('description') is-invalid @enderror"
-                                              id="description" name="description" rows="4"
-                                              placeholder="Décrivez le problème le plus précisément possible..." required>{{ old('description') }}</textarea>
-                                    @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="priorite" class="form-label fw-bold">
-                                        Niveau d'urgence <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select @error('priorite') is-invalid @enderror"
-                                            id="priorite" name="priorite" required>
-                                        <option value="faible" {{ old('priorite') == 'faible' ? 'selected' : '' }}>Faible — Peut attendre</option>
-                                        <option value="moyenne" {{ old('priorite', 'moyenne') == 'moyenne' ? 'selected' : '' }}>Moyenne — Normal</option>
-                                        <option value="haute" {{ old('priorite') == 'haute' ? 'selected' : '' }}>Haute — Prioritaire</option>
-                                        <option value="urgente" {{ old('priorite') == 'urgente' ? 'selected' : '' }}>Urgente — Danger immédiat</option>
-                                    </select>
-                                    @error('priorite') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                </div>
-                                <div class="col-md-8">
-                                    <label for="photo" class="form-label fw-bold">Photo (optionnel)</label>
-                                    <input type="file" class="form-control @error('photo') is-invalid @enderror"
-                                           id="photo" name="photo" accept="image/*">
-                                    <div class="form-text">JPEG, PNG ou GIF — Max 2 Mo</div>
-                                    @error('photo') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                </div>
-                            </div>
-
-                            <!-- Étape 2 : Localisation -->
-                            <div class="mb-4 pb-3 border-bottom">
-                                <h5 class="fw-bold" style="color:var(--primary);">
-                                    <span class="badge bg-primary rounded-circle me-2" style="width:28px;height:28px;font-size:0.85rem;">2</span>
-                                    Localisation
-                                </h5>
-                            </div>
-
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-8">
-                                    <label for="adresse" class="form-label fw-bold">
-                                        Adresse exacte <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-white"><i class="bi bi-geo-alt text-primary"></i></span>
-                                        <input type="text" class="form-control @error('adresse') is-invalid @enderror"
-                                               id="adresse" name="adresse" value="{{ old('adresse') }}"
-                                               placeholder="Ex: 12 Rue de la Paix" required>
-                                    </div>
-                                    @error('adresse') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="quartier" class="form-label fw-bold">Quartier</label>
-                                    <input type="text" class="form-control @error('quartier') is-invalid @enderror"
-                                           id="quartier" name="quartier" value="{{ old('quartier') }}"
-                                           placeholder="Ex: Centre-ville">
-                                    @error('quartier') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-bold">
-                                        <i class="bi bi-pin-map text-primary me-1"></i> Position sur la carte
-                                        <small class="text-muted fw-normal">(cliquez pour placer le marqueur)</small>
-                                    </label>
-                                    <div id="mapPicker" style="height:300px;border-radius:12px;border:2px solid #dee2e6;"></div>
-                                    <div class="row mt-2">
-                                        <div class="col-6">
-                                            <input type="text" class="form-control form-control-sm bg-light" id="latitude" name="latitude" value="{{ old('latitude') }}" placeholder="Latitude" readonly>
-                                        </div>
-                                        <div class="col-6">
-                                            <input type="text" class="form-control form-control-sm bg-light" id="longitude" name="longitude" value="{{ old('longitude') }}" placeholder="Longitude" readonly>
-                                        </div>
-                                    </div>
-                                    <button type="button" id="btnGeolocate" class="btn btn-sm btn-outline-primary mt-2">
-                                        <i class="bi bi-crosshair me-1"></i> Utiliser ma position actuelle
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Étape 3 : Vos coordonnées -->
-                            <div class="mb-4 pb-3 border-bottom">
-                                <h5 class="fw-bold" style="color:var(--primary);">
-                                    <span class="badge bg-primary rounded-circle me-2" style="width:28px;height:28px;font-size:0.85rem;">3</span>
-                                    Vos coordonnées
-                                </h5>
-                            </div>
-
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-4">
-                                    <label for="signale_par" class="form-label fw-bold">
-                                        Nom complet <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-white"><i class="bi bi-person text-primary"></i></span>
-                                        <input type="text" class="form-control @error('signale_par') is-invalid @enderror"
-                                               id="signale_par" name="signale_par" value="{{ old('signale_par') }}"
-                                               placeholder="Votre nom" required>
-                                    </div>
-                                    @error('signale_par') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="email_signaleur" class="form-label fw-bold">Email</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-white"><i class="bi bi-envelope text-primary"></i></span>
-                                        <input type="email" class="form-control @error('email_signaleur') is-invalid @enderror"
-                                               id="email_signaleur" name="email_signaleur" value="{{ old('email_signaleur') }}"
-                                               placeholder="votre@email.com">
-                                    </div>
-                                    @error('email_signaleur') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="telephone_signaleur" class="form-label fw-bold">Téléphone</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-white"><i class="bi bi-telephone text-primary"></i></span>
-                                        <input type="text" class="form-control @error('telephone_signaleur') is-invalid @enderror"
-                                               id="telephone_signaleur" name="telephone_signaleur" value="{{ old('telephone_signaleur') }}"
-                                               placeholder="06 12 34 56 78">
-                                    </div>
-                                    @error('telephone_signaleur') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                                </div>
-                            </div>
-
-                            <!-- Info RGPD -->
-                            <div class="alert alert-light border small mb-4">
-                                <i class="bi bi-shield-check me-2 text-primary"></i>
-                                Vos données personnelles sont traitées uniquement dans le cadre du suivi de votre signalement,
-                                conformément au RGPD. Elles ne seront jamais transmises à des tiers.
-                            </div>
-
-                            <!-- Submit -->
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary-custom btn-lg px-5">
-                                    <i class="bi bi-send me-2"></i>Envoyer mon signalement
-                                </button>
-                            </div>
-                        </form>
+                    <div class="grid gap-4 sm:grid-cols-3">
+                        <div class="sm:col-span-2">
+                            <label for="titre" class="mb-1 block text-sm font-semibold text-slate-700">Titre <span class="text-rose-500">*</span></label>
+                            <input type="text" id="titre" name="titre" value="{{ old('titre') }}" required
+                                   class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500 @error('titre') border-rose-400 @enderror"
+                                   placeholder="Ex : Nid-de-poule avenue Bourguiba">
+                            @error('titre') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label for="categorie_id" class="mb-1 block text-sm font-semibold text-slate-700">Catégorie <span class="text-rose-500">*</span></label>
+                            <select id="categorie_id" name="categorie_id" required
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500 @error('categorie_id') border-rose-400 @enderror">
+                                <option value="">-- Choisir --</option>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->id }}" {{ old('categorie_id', request('categorie'))==$cat->id?'selected':'' }}>{{ $cat->nom }}</option>
+                                @endforeach
+                            </select>
+                            @error('categorie_id') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="sm:col-span-3">
+                            <label for="description" class="mb-1 block text-sm font-semibold text-slate-700">Description détaillée <span class="text-rose-500">*</span></label>
+                            <textarea id="description" name="description" rows="4" required
+                                      class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500 @error('description') border-rose-400 @enderror"
+                                      placeholder="Décrivez le problème le plus précisément possible…">{{ old('description') }}</textarea>
+                            @error('description') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label for="priorite" class="mb-1 block text-sm font-semibold text-slate-700">Urgence <span class="text-rose-500">*</span></label>
+                            <select id="priorite" name="priorite" required
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500">
+                                <option value="faible" {{ old('priorite')=='faible'?'selected':'' }}>Faible</option>
+                                <option value="moyenne" {{ old('priorite','moyenne')=='moyenne'?'selected':'' }}>Moyenne</option>
+                                <option value="haute" {{ old('priorite')=='haute'?'selected':'' }}>Haute</option>
+                                <option value="urgente" {{ old('priorite')=='urgente'?'selected':'' }}>Urgente</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label for="photo" class="mb-1 block text-sm font-semibold text-slate-700">Photo (optionnel)</label>
+                            <input type="file" id="photo" name="photo" accept="image/*"
+                                   class="w-full rounded-xl border border-slate-300 px-4 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-50 file:px-3 file:py-1 file:text-sm file:font-semibold file:text-brand-600 @error('photo') border-rose-400 @enderror">
+                            <p class="mt-1 text-xs text-slate-400">JPEG, PNG ou GIF — Max 2 Mo</p>
+                            @error('photo') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                {{-- Étape 2 — Localisation --}}
+                <div>
+                    <div class="mb-5 flex items-center gap-3 border-b border-slate-200 pb-3">
+                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white">2</span>
+                        <h3 class="font-display text-lg font-bold text-brand-600">Localisation</h3>
+                    </div>
+
+                    <div class="grid gap-4 sm:grid-cols-3">
+                        <div class="sm:col-span-2">
+                            <label for="adresse" class="mb-1 block text-sm font-semibold text-slate-700">Adresse exacte <span class="text-rose-500">*</span></label>
+                            <div class="relative">
+                                <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400"><i class="bi bi-geo-alt"></i></span>
+                                <input type="text" id="adresse" name="adresse" value="{{ old('adresse') }}" required
+                                       class="w-full rounded-xl border border-slate-300 py-2.5 pl-9 pr-4 text-sm focus:border-brand-500 focus:ring-brand-500 @error('adresse') border-rose-400 @enderror"
+                                       placeholder="Ex : Avenue Cheikh Anta Diop, Dakar">
+                            </div>
+                            @error('adresse') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label for="quartier" class="mb-1 block text-sm font-semibold text-slate-700">Quartier</label>
+                            <input type="text" id="quartier" name="quartier" value="{{ old('quartier') }}"
+                                   class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500"
+                                   placeholder="Ex : Plateau, Médina…">
+                        </div>
+                        <div class="sm:col-span-3">
+                            <label class="mb-1 block text-sm font-semibold text-slate-700">
+                                <i class="bi bi-pin-map mr-1 text-brand-500"></i> Position sur la carte
+                                <span class="ml-1 text-xs font-normal text-slate-400">(cliquez pour placer le marqueur)</span>
+                            </label>
+                            <div id="mapPicker" class="rounded-xl border-2 border-slate-300" style="height:300px;"></div>
+                            <div class="mt-2 grid grid-cols-2 gap-2">
+                                <input type="text" id="latitude" name="latitude" value="{{ old('latitude') }}" placeholder="Latitude" readonly
+                                       class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-500">
+                                <input type="text" id="longitude" name="longitude" value="{{ old('longitude') }}" placeholder="Longitude" readonly
+                                       class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-500">
+                            </div>
+                            <button type="button" id="btnGeolocate"
+                                    class="mt-2 inline-flex items-center gap-1 rounded-lg border border-brand-500 px-3 py-1.5 text-xs font-semibold text-brand-500 transition hover:bg-brand-50">
+                                <i class="bi bi-crosshair"></i> Utiliser ma position actuelle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Étape 3 — Vos coordonnées (pré-remplies depuis l'utilisateur connecté) --}}
+                <div>
+                    <div class="mb-5 flex items-center gap-3 border-b border-slate-200 pb-3">
+                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white">3</span>
+                        <h3 class="font-display text-lg font-bold text-brand-600">Vos coordonnées</h3>
+                    </div>
+
+                    <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
+                        <div class="grid gap-4 sm:grid-cols-3">
+                            <div>
+                                <label class="mb-1 block text-sm font-semibold text-slate-700">Nom complet</label>
+                                <p class="text-sm text-slate-900 font-medium">{{ auth()->user()->name }}</p>
+                                <input type="hidden" name="signale_par" value="{{ auth()->user()->name }}">
+                            </div>
+                            <div>
+                                <label class="mb-1 block text-sm font-semibold text-slate-700">Email</label>
+                                <p class="text-sm text-slate-900 font-medium">{{ auth()->user()->email }}</p>
+                                <input type="hidden" name="email_signaleur" value="{{ auth()->user()->email }}">
+                            </div>
+                            <div>
+                                <label for="telephone_signaleur" class="mb-1 block text-sm font-semibold text-slate-700">Téléphone</label>
+                                <input type="text" id="telephone_signaleur" name="telephone_signaleur" value="{{ old('telephone_signaleur') }}"
+                                       class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500"
+                                       placeholder="+221 77 123 45 67">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Info RGPD --}}
+                <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-500">
+                    <i class="bi bi-shield-check mr-1 text-brand-500"></i>
+                    Vos données personnelles sont traitées uniquement dans le cadre du suivi de votre signalement,
+                    conformément à la loi sénégalaise sur la protection des données personnelles. Elles ne seront jamais transmises à des tiers.
+                </div>
+
+                {{-- Submit --}}
+                <div class="text-center">
+                    <button type="submit"
+                            class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600">
+                        <i class="bi bi-send"></i> Envoyer mon signalement
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </section>

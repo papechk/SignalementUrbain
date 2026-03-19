@@ -37,59 +37,12 @@
         }
     </script>
 
-    <!-- Compat temporaire pour les pages non migrees -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <style>
         [x-cloak] { display: none !important; }
         body { font-family: 'Public Sans', sans-serif; }
-
-        /* Classes legacy utilisees sur les vues encore en Bootstrap */
-        .section-title {
-            font-family: 'Manrope', sans-serif;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: .35rem;
-            font-size: 1.75rem;
-        }
-
-        .section-subtitle {
-            color: #64748b;
-            font-size: 1rem;
-            margin-bottom: 1.75rem;
-        }
-
-        .btn-primary-custom {
-            background: #1d6fe8;
-            border: none;
-            border-radius: .75rem;
-            padding: .7rem 1.4rem;
-            color: #fff;
-            font-weight: 600;
-        }
-
-        .btn-primary-custom:hover { background: #165fcb; color: #fff; }
-
-        .btn-outline-custom {
-            border: 2px solid #1d6fe8;
-            border-radius: .75rem;
-            padding: .65rem 1.3rem;
-            color: #1d6fe8;
-            font-weight: 600;
-            background: transparent;
-        }
-
-        .btn-outline-custom:hover { background: #1d6fe8; color: #fff; }
-
-        .badge-nouveau  { background: #dbeafe; color: #1d4ed8; }
-        .badge-en_cours { background: #fef3c7; color: #b45309; }
-        .badge-resolu   { background: #d1fae5; color: #065f46; }
-        .badge-rejete   { background: #fee2e2; color: #991b1b; }
-        .badge-faible   { background: #e0f2fe; color: #0369a1; }
-        .badge-moyenne  { background: #dbeafe; color: #1d4ed8; }
-        .badge-haute    { background: #fef3c7; color: #b45309; }
-        .badge-urgente  { background: #fee2e2; color: #991b1b; }
     </style>
 
     @stack('styles')
@@ -127,12 +80,29 @@
                 </a>
             </nav>
 
-            <div class="hidden md:block">
+            <div class="hidden items-center gap-3 md:flex">
                 <a href="{{ route('vitrine.signaler') }}"
                    class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-600">
                     <i class="bi bi-megaphone"></i>
                     Signaler
                 </a>
+                @auth
+                    <a href="{{ route('admin.dashboard') }}"
+                       class="rounded-lg px-3 py-2 text-sm font-medium text-slate-200 hover:bg-white/10 hover:text-white">
+                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-200 hover:bg-white/10 hover:text-white">
+                            <i class="bi bi-box-arrow-right me-1"></i>Déconnexion
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}"
+                       class="rounded-lg border border-slate-600 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10 hover:text-white">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>Connexion
+                    </a>
+                @endauth
             </div>
 
             <button id="mobileMenuBtn"
@@ -155,8 +125,23 @@
                 <a href="{{ route('vitrine.contact') }}" class="block rounded-lg px-3 py-2 text-sm {{ request()->routeIs('vitrine.contact') ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-white/10' }}">Contact</a>
                 <a href="{{ route('vitrine.signaler') }}" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-600">
                     <i class="bi bi-megaphone"></i>
-                    Signaler un probleme
+                    Signaler un problème
                 </a>
+                @auth
+                    <a href="{{ route('admin.dashboard') }}" class="mt-2 block rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-white/10">
+                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-200 hover:bg-white/10">
+                            <i class="bi bi-box-arrow-right me-1"></i>Déconnexion
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="mt-2 block rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-white/10">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>Connexion
+                    </a>
+                @endauth
             </div>
         </div>
     </header>
@@ -208,7 +193,7 @@
             </div>
             <div>
                 <h4 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Administration</h4>
-                <p class="mt-3 text-sm text-slate-600">Acces reserve aux services municipaux.</p>
+                <p class="mt-3 text-sm text-slate-600">Accès réservé aux services municipaux.</p>
                 <a href="{{ route('admin.dashboard') }}"
                    class="mt-3 inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:border-slate-400 hover:bg-slate-100">
                     <i class="bi bi-shield-lock"></i>

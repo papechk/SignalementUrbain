@@ -189,7 +189,7 @@ class SignalementController extends Controller
         $signalement->commentaire_mairie = $validated['commentaire_mairie'] ?? $signalement->commentaire_mairie;
 
         if ($validated['statut'] === 'resolu') {
-            $signalement->date_resolution = now();
+            $signalement->date_resolution = \Illuminate\Support\Carbon::now();
         }
 
         $signalement->save();

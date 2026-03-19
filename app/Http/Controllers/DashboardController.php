@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categorie;
-use App\Models\Paiement;
-use App\Models\Reservation;
 use App\Models\Signalement;
-use App\Models\Terrain;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -50,43 +48,26 @@ class DashboardController extends Controller
             ? round(($stats['resolu'] / $stats['total']) * 100, 1)
             : 0;
 
-        $widget = [
-            'terrains_total' => Terrain::count(),
-            'terrains_actifs' => Terrain::where('actif', true)->count(),
-            'reservations_jour' => Reservation::duJour()
-                ->where('statut', '!=', 'annulee')
-                ->count(),
-            'revenu_jour' => Paiement::where('statut', 'paye')
-                ->whereDate('date_paiement', today())
-                ->sum('montant'),
-            'revenu_mois' => Paiement::where('statut', 'paye')
-                ->whereYear('date_paiement', now()->year)
-                ->whereMonth('date_paiement', now()->month)
-                ->sum('montant'),
-        ];
+        $nbUtilisateurs = User::count();
 
-        $prochainesReservations = Reservation::with('terrain')
-            ->where('debut', '>=', now())
-            ->where('statut', '!=', 'annulee')
-            ->orderBy('debut')
-            ->take(5)
-            ->get();
+        $signalementsMois = Signalement::whereYear('created_at', now()->year)
+            ->whereMonth('created_at', now()->month)
+            ->count();
 
-        $paiementsRecents = Paiement::with('reservation.terrain')
-            ->latest()
-            ->take(5)
-            ->get();
+        $nbQuartiers = Signalement::whereNotNull('quartier')
+            ->distinct('quartier')
+            ->count('quartier');
 
-        return view('dashboard.index', compact(
+        return view('dashboard.index-tw', compact(
             'stats',
             'parPriorite',
             'parCategorie',
             'derniers',
             'urgents',
             'tauxResolution',
-            'widget',
-            'prochainesReservations',
-            'paiementsRecents'
+            'nbUtilisateurs',
+            'signalementsMois',
+            'nbQuartiers'
         ));
     }
 }

@@ -9,6 +9,8 @@ class Creneau extends Model
 {
     use HasFactory;
 
+    protected $table = 'creneaux';
+
     protected $fillable = [
         'terrain_id',
         'titre',

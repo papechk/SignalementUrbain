@@ -6,163 +6,140 @@
 @if($signalement->latitude && $signalement->longitude)
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-<style>#detailMap { height: 200px; border-radius: 10px; margin-top: .75rem; }</style>
 @endif
 @endpush
 
 @section('content')
-<section style="padding: 3rem 0;">
-    <div class="container">
-        <div class="mb-4">
-            <a href="{{ route('vitrine.signalements') }}" class="text-decoration-none text-muted">
-                <i class="bi bi-arrow-left me-1"></i> Retour aux signalements
-            </a>
-        </div>
+<section class="py-14">
+    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        <div class="row g-4">
-            <!-- Contenu principal -->
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm" style="border-radius:14px;">
-                    <div class="card-body p-4">
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="badge badge-{{ $signalement->statut }} rounded-pill px-3">
-                                {{ $signalement->statut_label }}
-                            </span>
-                            <span class="badge badge-{{ $signalement->priorite }} rounded-pill px-3">
-                                <i class="bi bi-flag me-1"></i>{{ ucfirst($signalement->priorite) }}
-                            </span>
-                            <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3">
-                                <i class="bi bi-tag me-1"></i>{{ $signalement->categorie->nom }}
-                            </span>
-                        </div>
+        <a href="{{ route('vitrine.signalements') }}" class="mb-6 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-brand-500 transition">
+            <i class="bi bi-arrow-left"></i> Retour aux signalements
+        </a>
 
-                        <h3 class="fw-bold mb-3" style="color:var(--secondary);">{{ $signalement->titre }}</h3>
-
-                        <div class="mb-4">
-                            <h6 class="fw-bold text-muted text-uppercase small">Description</h6>
-                            <p class="mb-0" style="line-height:1.7;">{{ $signalement->description }}</p>
-                        </div>
-
-                        @if($signalement->photo)
-                        <div class="mb-4">
-                            <h6 class="fw-bold text-muted text-uppercase small">Photo</h6>
-                            <img src="{{ asset($signalement->photo) }}" alt="Photo du signalement"
-                                 class="img-fluid rounded-3" style="max-height:400px;">
-                        </div>
-                        @endif
-
-                        @if($signalement->commentaire_mairie)
-                        <div class="mb-3">
-                            <h6 class="fw-bold text-muted text-uppercase small">Réponse de la mairie</h6>
-                            <div class="p-3 rounded-3" style="background:#eff6ff;border-left:4px solid var(--primary);">
-                                <i class="bi bi-building me-2 text-primary"></i>{{ $signalement->commentaire_mairie }}
-                            </div>
-                        </div>
-                        @endif
+        <div class="grid gap-6 lg:grid-cols-3">
+            {{-- Contenu principal --}}
+            <div class="lg:col-span-2">
+                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    {{-- Badges --}}
+                    <div class="mb-4 flex flex-wrap gap-2">
+                        @php
+                            $statutColors = ['nouveau'=>'bg-blue-100 text-blue-700','en_cours'=>'bg-amber-100 text-amber-700','resolu'=>'bg-emerald-100 text-emerald-700','rejete'=>'bg-rose-100 text-rose-700'];
+                            $prioColors   = ['faible'=>'bg-slate-100 text-slate-600','moyenne'=>'bg-amber-100 text-amber-700','haute'=>'bg-orange-100 text-orange-700','urgente'=>'bg-rose-100 text-rose-700'];
+                        @endphp
+                        <span class="inline-block rounded-full px-3 py-1 text-xs font-semibold {{ $statutColors[$signalement->statut] ?? '' }}">
+                            {{ ucfirst(str_replace('_',' ',$signalement->statut)) }}
+                        </span>
+                        <span class="inline-block rounded-full px-3 py-1 text-xs font-semibold {{ $prioColors[$signalement->priorite] ?? '' }}">
+                            <i class="bi bi-flag mr-1"></i>{{ ucfirst($signalement->priorite) }}
+                        </span>
+                        <span class="inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                            <i class="bi bi-tag mr-1"></i>{{ $signalement->categorie->nom }}
+                        </span>
                     </div>
+
+                    <h2 class="mb-4 font-display text-2xl font-extrabold text-slate-900">{{ $signalement->titre }}</h2>
+
+                    {{-- Description --}}
+                    <div class="mb-5">
+                        <h4 class="mb-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Description</h4>
+                        <p class="text-sm leading-relaxed text-slate-700">{{ $signalement->description }}</p>
+                    </div>
+
+                    {{-- Photo --}}
+                    @if($signalement->photo)
+                    <div class="mb-5">
+                        <h4 class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Photo</h4>
+                        <img src="{{ asset($signalement->photo) }}" alt="Photo du signalement"
+                             class="max-h-96 w-full rounded-xl object-cover">
+                    </div>
+                    @endif
+
+                    {{-- Réponse mairie --}}
+                    @if($signalement->commentaire_mairie)
+                    <div>
+                        <h4 class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Réponse de la mairie</h4>
+                        <div class="rounded-xl border-l-4 border-brand-500 bg-brand-50 px-4 py-3 text-sm text-slate-700">
+                            <i class="bi bi-building mr-2 text-brand-500"></i>{{ $signalement->commentaire_mairie }}
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 
-            <!-- Sidebar -->
-            <div class="col-lg-4">
-                <!-- Informations -->
-                <div class="card border-0 shadow-sm mb-4" style="border-radius:14px;">
-                    <div class="card-body p-4">
-                        <h6 class="fw-bold mb-3"><i class="bi bi-info-circle me-2 text-primary"></i>Informations</h6>
-                        <table class="table table-borderless table-sm mb-0">
-                            <tr>
-                                <td class="text-muted small fw-bold" style="width:40%;">Référence</td>
-                                <td><code class="text-primary">{{ $signalement->reference }}</code></td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted small fw-bold">Date</td>
-                                <td>{{ $signalement->created_at->format('d/m/Y à H:i') }}</td>
-                            </tr>
-                            @if($signalement->date_resolution)
-                            <tr>
-                                <td class="text-muted small fw-bold">Résolu le</td>
-                                <td class="text-success fw-bold">{{ $signalement->date_resolution->format('d/m/Y') }}</td>
-                            </tr>
-                            @endif
-                            <tr>
-                                <td class="text-muted small fw-bold">Signalé par</td>
-                                <td>{{ $signalement->signale_par }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Localisation -->
-                <div class="card border-0 shadow-sm mb-4" style="border-radius:14px;">
-                    <div class="card-body p-4">
-                        <h6 class="fw-bold mb-3"><i class="bi bi-geo-alt me-2 text-primary"></i>Localisation</h6>
-                        <p class="mb-1"><strong>{{ $signalement->adresse }}</strong></p>
-                        @if($signalement->quartier)
-                            <p class="text-muted small mb-0">Quartier : {{ $signalement->quartier }}</p>
-                        @endif
-                        @if($signalement->latitude && $signalement->longitude)
-                            <div id="detailMap"></div>
-                        @endif
-                    </div>
-                </div>
-
-                <!-- Suivi -->
-                <div class="card border-0 shadow-sm" style="border-radius:14px;">
-                    <div class="card-body p-4">
-                        <h6 class="fw-bold mb-3"><i class="bi bi-clock-history me-2 text-primary"></i>Historique</h6>
-                        <div class="d-flex flex-column gap-3">
-                            <div class="d-flex align-items-start">
-                                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center me-3"
-                                     style="width:28px;height:28px;min-width:28px;">
-                                    <i class="bi bi-plus text-white" style="font-size:0.75rem;"></i>
-                                </div>
-                                <div>
-                                    <div class="small fw-bold">Signalement créé</div>
-                                    <div class="text-muted" style="font-size:0.75rem;">{{ $signalement->created_at->format('d/m/Y H:i') }}</div>
-                                </div>
-                            </div>
-
-                            @if($signalement->statut !== 'nouveau')
-                            <div class="d-flex align-items-start">
-                                <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center me-3"
-                                     style="width:28px;height:28px;min-width:28px;">
-                                    <i class="bi bi-gear text-white" style="font-size:0.75rem;"></i>
-                                </div>
-                                <div>
-                                    <div class="small fw-bold">Pris en charge</div>
-                                    <div class="text-muted" style="font-size:0.75rem;">Par la mairie</div>
-                                </div>
-                            </div>
-                            @endif
-
-                            @if($signalement->statut === 'resolu')
-                            <div class="d-flex align-items-start">
-                                <div class="rounded-circle bg-success d-flex align-items-center justify-content-center me-3"
-                                     style="width:28px;height:28px;min-width:28px;">
-                                    <i class="bi bi-check text-white" style="font-size:0.75rem;"></i>
-                                </div>
-                                <div>
-                                    <div class="small fw-bold text-success">Résolu</div>
-                                    <div class="text-muted" style="font-size:0.75rem;">
-                                        {{ $signalement->date_resolution ? $signalement->date_resolution->format('d/m/Y H:i') : '' }}
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-
-                            @if($signalement->statut === 'rejete')
-                            <div class="d-flex align-items-start">
-                                <div class="rounded-circle bg-danger d-flex align-items-center justify-content-center me-3"
-                                     style="width:28px;height:28px;min-width:28px;">
-                                    <i class="bi bi-x text-white" style="font-size:0.75rem;"></i>
-                                </div>
-                                <div>
-                                    <div class="small fw-bold text-danger">Rejeté</div>
-                                    <div class="text-muted" style="font-size:0.75rem;">Non pris en charge</div>
-                                </div>
-                            </div>
-                            @endif
+            {{-- Sidebar --}}
+            <div class="space-y-6">
+                {{-- Informations --}}
+                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <h4 class="mb-4 text-sm font-bold text-slate-900"><i class="bi bi-info-circle mr-2 text-brand-500"></i>Informations</h4>
+                    <dl class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <dt class="font-semibold text-slate-500">Référence</dt>
+                            <dd class="font-mono text-brand-600">{{ $signalement->reference }}</dd>
                         </div>
+                        <div class="flex justify-between">
+                            <dt class="font-semibold text-slate-500">Date</dt>
+                            <dd>{{ $signalement->created_at->format('d/m/Y à H:i') }}</dd>
+                        </div>
+                        @if($signalement->date_resolution)
+                        <div class="flex justify-between">
+                            <dt class="font-semibold text-slate-500">Résolu le</dt>
+                            <dd class="font-bold text-emerald-600">{{ $signalement->date_resolution->format('d/m/Y') }}</dd>
+                        </div>
+                        @endif
+                        <div class="flex justify-between">
+                            <dt class="font-semibold text-slate-500">Signalé par</dt>
+                            <dd>{{ $signalement->signale_par }}</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                {{-- Localisation --}}
+                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <h4 class="mb-3 text-sm font-bold text-slate-900"><i class="bi bi-geo-alt mr-2 text-brand-500"></i>Localisation</h4>
+                    <p class="text-sm font-semibold text-slate-800">{{ $signalement->adresse }}</p>
+                    @if($signalement->quartier)
+                        <p class="text-xs text-slate-500">Quartier : {{ $signalement->quartier }}</p>
+                    @endif
+                    @if($signalement->latitude && $signalement->longitude)
+                        <div id="detailMap" class="mt-3 rounded-xl" style="height:200px;"></div>
+                    @endif
+                </div>
+
+                {{-- Historique --}}
+                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <h4 class="mb-4 text-sm font-bold text-slate-900"><i class="bi bi-clock-history mr-2 text-brand-500"></i>Historique</h4>
+                    <div class="relative space-y-4 border-l-2 border-slate-200 pl-5">
+                        {{-- Créé --}}
+                        <div class="relative">
+                            <span class="absolute -left-[1.65rem] top-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-500 text-[10px] text-white"><i class="bi bi-plus"></i></span>
+                            <p class="text-sm font-bold text-slate-800">Signalement créé</p>
+                            <p class="text-xs text-slate-400">{{ $signalement->created_at->format('d/m/Y H:i') }}</p>
+                        </div>
+
+                        @if($signalement->statut !== 'nouveau')
+                        <div class="relative">
+                            <span class="absolute -left-[1.65rem] top-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-400 text-[10px] text-white"><i class="bi bi-gear"></i></span>
+                            <p class="text-sm font-bold text-slate-800">Pris en charge</p>
+                            <p class="text-xs text-slate-400">Par la mairie</p>
+                        </div>
+                        @endif
+
+                        @if($signalement->statut === 'resolu')
+                        <div class="relative">
+                            <span class="absolute -left-[1.65rem] top-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white"><i class="bi bi-check"></i></span>
+                            <p class="text-sm font-bold text-emerald-600">Résolu</p>
+                            <p class="text-xs text-slate-400">{{ $signalement->date_resolution ? $signalement->date_resolution->format('d/m/Y H:i') : '' }}</p>
+                        </div>
+                        @endif
+
+                        @if($signalement->statut === 'rejete')
+                        <div class="relative">
+                            <span class="absolute -left-[1.65rem] top-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[10px] text-white"><i class="bi bi-x"></i></span>
+                            <p class="text-sm font-bold text-rose-600">Rejeté</p>
+                            <p class="text-xs text-slate-400">Non pris en charge</p>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
