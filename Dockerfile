@@ -28,13 +28,12 @@ RUN cp .env.render .env
 RUN composer dump-autoload --optimize
 RUN npm run build
 
-RUN touch database/database.sqlite \
-    && chown -R www-data:www-data storage bootstrap/cache database
+RUN php artisan key:generate --force
 
-RUN php artisan key:generate --force \
-    && php artisan config:clear \
-    && php artisan migrate --force \
-    && php artisan db:seed --force
+RUN chown -R www-data:www-data storage bootstrap/cache database
 
-EXPOSE 80
-CMD ["apache2-foreground"]
+COPY docker/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+EXPOSE 10000
+CMD ["/usr/local/bin/start.sh"]
